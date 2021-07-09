@@ -6,30 +6,35 @@
 #include <Arduino.h>
 
 class FlashFile {
-  File    mFile;
-  String  mFilePath;
-
-  bool    mExisted;
-  
-  static bool fileSystemStarted;
-  static void flashSystemBegin();
-  
   public:
-  FlashFile(String filePath);
-  ~FlashFile();
-
-  bool    existed();
+    enum class _WriteType : int {
+      Append = 0,
+      Override = 1
+    };
+    
+    FlashFile(String filePath);
+    ~FlashFile();
   
-  File&   getSPIFileByReference();
-  void    changeFilePath(String filePath);
-
-  template <typename T>
-  bool  writeKeyValueToContent(String key, T value);
-  template <typename T>
-  T     readKeyValueToContent(String key);
+    bool    existed();
+    
+    File&   getSPIFileByReference();
+    void    changeFilePath(String filePath);
   
-  bool    saveContent(const String content);
-  String  loadContent();
+    template <typename T>
+    bool   writeKeyValueToContent(String key, T value);
+    String readKeyValueToContent(String key) const;
+    
+    bool    saveContent(const String content, _WriteType writeType = _WriteType::Override);
+    String  loadContent();
+
+  private:
+    File    mFile;
+    String  mFilePath;
+  
+    bool    mExisted;
+    
+    static bool fileSystemStarted;
+    static void flashSystemBegin();
 };
 
 #endif // FLASHFILE_H

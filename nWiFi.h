@@ -15,8 +15,6 @@ namespace network {
   void loadConfig(const FlashFile& configFile);
 }
 
-//String network::nSsid = "not_conf";
-
 void network::configureIP() {
   IPAddress localIp(133,133,7,7);
   IPAddress gateway(133,133,7,7);
@@ -40,7 +38,7 @@ void network::enableWiFi() {
 }
 
 void network::loadConfig(const FlashFile& configFile) {
-  
+  nSsid = configFile.readKeyValueToContent("ssid");
 }
 
 #endif // NETWORK_H

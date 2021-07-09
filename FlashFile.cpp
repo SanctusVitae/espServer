@@ -35,17 +35,46 @@ File& FlashFile::getSPIFileByReference() {
 
 template <typename T>
 bool FlashFile::writeKeyValueToContent(String key, T value) {
+  StaticJsonDocument<200> json;
+  json[key] = value;
+  
+  File mFile = SPIFFS.open(mFilePath, "a+");
+  if (!mFile) {
+    return false;
+  }
+  serializeJson(json, mFile);
+  mFile.close();
   return true;
 }
 
-template <typename T>
-T FlashFile::readKeyValueToContent(String key) {
-  return static_cast<T>(key);
+String FlashFile::readKeyValueToContent(String key) const {
+  File mFile = SPIFFS.open(mFilePath, "r");
+  
+  size_t size = mFile.size();
+  char* buf = new char[size];
+  mFile.readBytes(buf, size);
+  
+  DynamicJsonDocument json(200);
+  DeserializationError error = deserializeJson(json, buf);
+
+  String value = json[key];
+  
+  mFile.close();
+  delete buf;
+  return value;
 }
 
-bool FlashFile::saveContent(const String content) {
+bool FlashFile::saveContent(const String content, _WriteType writeType) {
+  if (writeType == _WriteType::Override)
+    SPIFFS.remove(mFilePath);
+  File file = SPIFFS.open(mFilePath, "a+");
+  if (!file)
+    return false;
+  file.write(content.c_str());
+  file.close();
   return true;
 }
+
 
 String FlashFile::loadContent() {
   if (!SPIFFS.exists(mFilePath)) return "NoFile: " + mFilePath;

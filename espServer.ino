@@ -51,17 +51,19 @@ void socketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
 */
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
   SPIFFS.begin();
 
-  FlashFile configFile("/netConf.ini");
+  FlashFile configFile(network::configFileName);
   if (configFile.existed())
     network::loadConfig(configFile);
+
+  FlashFile logChat("/cont/chat.log");
+  logChat.saveContent("", FlashFile::_WriteType::Append);
   
   network::disableWiFi();
   network::configureIP();
-  network::enableWiFi("VitaeWiFi");
+  network::enableWiFi("esp_wifi");
 
   network::http::configureResponses();
   network::http::startServerService();
@@ -75,21 +77,4 @@ void loop() {
   //if (anyUsersConnected()) {
       //server.manageUserRequests();
   //}
-  //configFile.fileRead();
-  /*
-  FlashFile file("/test.txt");
-  Serial.println("loading content");
-  file.loadContent();
-  Serial.println("end of content");
-  delay(3000);
-
-  Dir dir = SPIFFS.openDir("/data");
-  while (dir.next()) {
-      Serial.print(dir.fileName());
-      if (dir.fileSize()) {
-          File f = dir.openFile("r");
-          Serial.println(f.size());
-      }
-  }
-  delay(2000); */
 }

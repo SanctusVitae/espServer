@@ -54,7 +54,7 @@ void setup() {
   Serial.begin(115200);
   SPIFFS.begin();
 
-  FlashFile configFile(network::configFileName);
+  FlashFile configFile("/netConf.ini");
   if (configFile.existed())
     network::loadConfig(configFile);
 

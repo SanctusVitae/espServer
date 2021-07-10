@@ -29,12 +29,8 @@ void network::disableWiFi() {
   WiFi.mode(WIFI_STA);
 }
 
-void network::enableWiFi(String ssid) {
+void network::enableWiFi(String ssid = nSsid) {
   WiFi.softAP(ssid);
-}
-
-void network::enableWiFi() {
-  WiFi.softAP(nSsid);
 }
 
 void network::loadConfig(const FlashFile& configFile) {

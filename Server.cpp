@@ -7,15 +7,30 @@ namespace http {
 //=============Private functions here================
 //===================================================
 namespace { // private namespace
-void retrieveIndexPage() {
-  server.on("", HTTP_GET, [](AsyncWebServerRequest* request){
-    request->send(SPIFFS, "/web/chat.html");
+void retrieveIndexPage() { // routing "" should happen LAST
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest* request){
+    request->send(SPIFFS, website::index);
+  });
+}
+
+void retrieveConfPage() { // routing "" should happen LAST
+  server.on("/confirm.html", HTTP_GET, [](AsyncWebServerRequest* request){
+    request->send(SPIFFS, website::conf);
   });
 }
 
 void sendFileForDownloadOnRoute(String route, String fileName) {
-  server.on(route.c_str(), HTTP_GET, [&fileName](AsyncWebServerRequest* request) {
-    request->send(SPIFFS, fileName.c_str(), String(), true);
+  server.on(route.c_str(), HTTP_POST, [fileName](AsyncWebServerRequest* request) {
+    //request->send(SPIFFS, fileName.c_str(), String(), true);
+    Serial.println("Some message");
+  });
+}
+
+void downloadFile() {
+  server.on("/filename", HTTP_GET, [](AsyncWebServerRequest* request){
+    String txt = "You are actually the";
+    Serial.println(txt);
+    request->send(SPIFFS, website::index);
   });
 }
 
@@ -28,16 +43,16 @@ void printMessageFromUser() {
 
 void updateWifiNetworkConfig() {
   server.on("/newwifi", HTTP_POST, [](AsyncWebServerRequest* request){
+    request->send(SPIFFS, website::chat);
     //FlashFile configFile(network::configFileName);
-   // configFile.writeKeyValueToContent("ssid", request->arg("netSSID"));
+    //configFile.writeKeyValueToContent("ssid", request->arg("netSSID"));
     //configFile.writeKeyValueToContent("pass", request->arg("netPASS"));
-    request->send(SPIFFS, "/web/chat.html");
   });
 }
 
 void restartEspDevice() {
   server.on("/restart", HTTP_POST, [](AsyncWebServerRequest* request){
-    ESP.restart();
+    //ESP.restart();
   });
 }
 
@@ -48,10 +63,13 @@ void restartEspDevice() {
 //==================================================
 void configureResponses() {
   retrieveIndexPage();
+  retrieveConfPage();
   sendFileForDownloadOnRoute("/gettest", "/web/index.html");
   printMessageFromUser();
   //updateWifiNetworkConfig();
-  restartEspDevice();
+  //restartEspDevice();
+  downloadFile();
+  // routing error 404 page
 }
 
 void startServerService() {

@@ -12,17 +12,11 @@ void FlashFile::flashSystemBegin() {
 FlashFile::FlashFile(String filePath) : mFilePath(filePath), mExisted(false) {
   if (!SPIFFS.exists(mFilePath))
     mExisted = true;
-  /*
-  File mFile = SPIFFS.open(mFilePath, "rw");
-  if (!mFile) {
-    return;
-  }*/
 }
 
 FlashFile::~FlashFile() {
   mFile.close();
   SPIFFS.gc();
-  //SPIFFS.end();
 }
 
 bool FlashFile::existed() {
@@ -54,10 +48,10 @@ String FlashFile::readKeyValueToContent(String key) const {
   char* buf = new char[size];
   mFile.readBytes(buf, size);
   
-  DynamicJsonDocument json(200);
-  DeserializationError error = deserializeJson(json, buf);
+  //DynamicJsonDocument json(200);
+  //DeserializationError error = deserializeJson(json, buf);
 
-  String value = json[key];
+  String value = "some_wifi";
   
   mFile.close();
   delete buf;
@@ -75,16 +69,17 @@ bool FlashFile::saveContent(const String content, _WriteType writeType) {
   return true;
 }
 
-
 String FlashFile::loadContent() {
-  if (!SPIFFS.exists(mFilePath)) return "NoFile: " + mFilePath;
+  if (!SPIFFS.exists(mFilePath))
+    return "NoFile: " + mFilePath;
 
   File file = SPIFFS.open(mFilePath, "r");
-  if (!file) { return "CannotReadFile: " + mFilePath; }
+  if (!file) 
+    return "CannotReadFile: " + mFilePath;
   
-  while (file.available()) {
+  while (file.available())
     Serial.write(file.read());
-  }
+
   file.close();
   return "";
 }

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Esp</title>
+    <style>
+		html {
+			font-size: 10px;
+			font-family: 'Open Sans', sans-serif;
+		}
+		.formLayout {
+			font-size: 20px;
+		}
+		.formLayout label {
+			clear: left;
+			float: left;
+			margin-right: 5px;
+			text-align: right;
+			width: 200px;
+		}
+		.formLayout input[type="text"],
+		.formLayout input[type="password"]		{
+			clear: right;
+			float: left;
+			margin: 2px;
+			padding: 5px;
+			width: 300px;
+		}
+		.submitButton, .resetButton {
+			font-size: 22px;
+			font-weight: bold;
+			margin-top: 5px;
+			width: 300px;
+		}
+		p, li {
+		  font-size: 16px;
+		  line-height: 2;
+		  letter-spacing: 1px;
+		}
+
+		html {
+		  height: 100%; 
+		  min-height: 100%;
+		  position: relative;
+		}
+		body {
+		  height: 100%; 
+		  min-height: 100%;
+		  position: relative;
+		  width: 100%;
+		  margin: 0;
+		  padding: 0;
+		  float: left;
+		  text-align: center;
+		  background-color: #FF9500;
+		}
+	</style>
+  </head>
+  <body>
+		<form action="/auth" method="POST" class="formLayout">
+			<h3>Network</h3>
+			<label for="name">Name</label>
+			<input id="name" name="name" type="text" value="" />
+			<label for="pass">Password</label>
+			<input id="pass" name="pass" type="password" value="" />
+			<label for="ip">IP</label>
+			<input id="ip" name="ip" type="text" value="" />
+			<input type="submit" value="Send" class="submitButton">
+		</form>
+		<form action="/reset" method="POST">
+			<input type="submit" value="Reset" class="resetButton">
+		</form>
+  </body>
+</html>

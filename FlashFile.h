@@ -11,18 +11,18 @@ class FlashFile {
       Append = 0,
       Override = 1
     };
-    
+
+  public:
     FlashFile(String filePath);
     ~FlashFile();
   
     bool    existed();
-    
     File&   getSPIFileByReference();
     void    changeFilePath(String filePath);
   
     template <typename T>
-    bool   writeKeyValueToContent(String key, T value);
-    String readKeyValueToContent(String key) const;
+    bool    writeKeyValueToContent(String key, T value);
+    String  readKeyValueToContent(String key) const;
     
     bool    saveContent(const String content, _WriteType writeType = _WriteType::Override);
     String  loadContent();
@@ -30,7 +30,6 @@ class FlashFile {
   private:
     File    mFile;
     String  mFilePath;
-  
     bool    mExisted;
     
     static bool fileSystemStarted;

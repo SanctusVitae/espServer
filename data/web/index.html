@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Esp</title>
+    <style>
+		html {
+			font-size: 10px;
+			font-family: 'Open Sans', sans-serif;
+			background-color: #00539F;
+		}
+		.maxHeight {
+			border-left: 5px solid black;
+			border-right: 5px solid black;
+			float: left;
+			height: 100%;
+		}
+		.contMenu {
+			  font-size: 48px;
+			  text-align: center;
+			  margin: 0;
+			  padding: 0;
+			  color: #00539F;
+			  text-shadow: 3px 3px 1px black;
+			  float: left;
+			  width: 25%;
+			  background-color: #FF9500;
+		}
+		.centerForm {
+			background-color: #FF9500;
+			margin: 0 4%;
+			text-align: center;
+			width: 40%;
+		}
+		.contChat {
+			  font-size: 48px;
+			  text-align: left;
+			  margin: 0;
+			  padding: 0;
+			  color: #00539F;
+			  text-shadow: 3px 3px 1px black;
+			  float: right;
+			  width: 25%;
+			  background-color: #FF9500;
+		}
+		
+		.menuContainer {
+			float: left;
+			margin: 0px 0px 50px 0px;
+			width: 100%;
+		}
+		.menuContainer form {
+			float: left;
+			height: 40px;
+			width: 100%;
+		}
+		.menu input[type="submit"] {
+			cursor: pointer;
+			border: none;
+			clear: left;
+			font-size: 22px;
+			font-weight: bold;
+			margin: 4px;
+			padding: 5px;
+			width: 200px;
+		}
+		.menu input.green {
+			background-color: green;
+		}
+		.menu input.red {
+			background-color: red;
+		}
+		.menu input.yellow {
+			background-color: yellow;
+		}
+		
+		.formLayout {
+			font-size: 20px;
+		}
+		.formLayout label {
+			clear: left;
+			float: left;
+			margin-right: 5px;
+			text-align: right;
+			width: 200px;
+		}
+		.formLayout input[type="text"],
+		.formLayout input[type="password"]		{
+			clear: right;
+			float: left;
+			margin: 2px;
+			padding: 5px;
+			width: 300px;
+		}
+		.submitButton, .resetButton {
+			font-size: 22px;
+			font-weight: bold;
+			margin-top: 5px;
+			width: 300px;
+		}
+		p, li {
+		  font-size: 16px;
+		  line-height: 2;
+		  letter-spacing: 1px;
+		}
+		.noBorders {
+			border: 0px solid black;
+		}
+		
+		.chatContainer textarea {
+			position: absolute;
+			text-align: left;
+			margin: 0px;
+			right: 15px;
+			top: 150px;
+			bottom: 50px;
+			width: 23%;
+			overflow-x: auto;
+            overflow-y: scroll;
+            white-space: nowrap;
+		}
+		
+		.myMessage {
+			position: fixed;
+			bottom: 0;
+			width: 100%;
+		}
+		.myMessage input[type="text"] {
+			float: left;
+			margin: 5px;
+			padding: 5px;
+			width: 300px;
+		}
+		.myMessage input[type="submit"] {
+			font-size: 22px;
+			font-weight: bold;
+			margin: 4px;
+			padding: 1px 10px;
+			float: left;
+		}
+
+		html {
+		  height: 100%; 
+		  min-height: 100%;
+		  position: relative;
+		}
+		body {
+		  height: 100%; 
+		  min-height: 100%;
+		  position: relative;
+		  width: 100%;
+		  margin: 0;
+		  padding: 0;
+		  float: left;
+		}
+	</style>
+  </head>
+  <body>
+	<div class="maxHeight contMenu">
+		<h1>ESP SERVER</h1>
+		<form action="/filename?name=chat.txt" method="POST">
+		<input type="submit" value="Submit">
+		</form>
+		
+		<div class="menuContainer">
+			<form action="/Net" class="menu"><input type="submit" value="Net" class="green"></form>		
+			<form action="/Cmd" class="menu"><input type="submit" value="Cmd" class="red"></form>		
+			<form action="/File" class="menu"><input type="submit" value="File" class="yellow"></form>
+		</div>
+		
+		<a href="filename">pliczek</a>
+		
+		<script src="/scripts/chat.js"></script>
+		<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+		
+		<label for="chatInput">Message:</label>
+		<input type="text" id="chatInput" class="chatInput">
+		<input onclick="sendChatMessage()" type="submit" value="Send" class="chatSend">
+	</div>
+	<div class="maxHeight centerForm">
+		<iframe class="noBorders" src="confirm.html" name="confirm" height="100%" width="600">You need a Frames Capable browser to view this content.</iframe>   
+	</div>
+	<div class="maxHeight contChat">
+		<h2>ESP CHAT</h2>
+		
+		
+		<div class="chatContainer">
+			<textarea>
+192.168.1.250: cześć
+ja: cześć byku!
+			</textarea>
+		</div>
+		
+		<div class="myMessage">
+			<input type="text" name="myInput" />
+			<input type="submit" value="Send">
+		</div>
+		
+		
+	</div>
+  </body>
+</html>

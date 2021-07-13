@@ -57,17 +57,22 @@
 	</style>
   </head>
   <body>
-		<form action="/auth" method="POST" class="formLayout">
+		<form action="/netcfg" method="POST" class="formLayout">
 			<h3>Network</h3>
-			<label for="name">Name</label>
-			<input id="name" name="name" type="text" value="" />
-			<label for="pass">Password</label>
-			<input id="pass" name="pass" type="password" value="" />
-			<label for="ip">IP</label>
-			<input id="ip" name="ip" type="text" value="" />
+			<h3>softAP config</h3>
+			<label for="apssid">softAP SSID</label>
+			<input id="apssid" name="apssid" type="text" value="" />
+			<label for="appass">softAP PASS</label>
+			<input id="appass" name="appass" type="password" value="" />
+			<label for="apip">softAP IP</label>
+			<input id="apip" name="apip" type="text" value="" />
+			<label for="netssid">net SSID</label>
+			<input id="netssid" name="netssid" type="text" value="" />
+			<label for="netpass">net PASS</label>
+			<input id="netpass" name="netpass" type="password" value="" />
 			<input type="submit" value="Send" class="submitButton">
 		</form>
-		<form action="/reset" method="POST">
+		<form action="/restartDev" method="POST">
 			<input type="submit" value="Reset" class="resetButton">
 		</form>
   </body>

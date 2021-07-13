@@ -15,8 +15,8 @@
 			float: left;
 			height: 100%;
 		}
-		.contMenu {
-			  font-size: 48px;
+		.titleLabel {
+			  font-size: 36px;
 			  text-align: center;
 			  margin: 0;
 			  padding: 0;
@@ -31,17 +31,6 @@
 			margin: 0 4%;
 			text-align: center;
 			width: 40%;
-		}
-		.contChat {
-			  font-size: 48px;
-			  text-align: left;
-			  margin: 0;
-			  padding: 0;
-			  color: #00539F;
-			  text-shadow: 3px 3px 1px black;
-			  float: right;
-			  width: 25%;
-			  background-color: #FF9500;
 		}
 		
 		.menuContainer {
@@ -58,11 +47,12 @@
 			cursor: pointer;
 			border: none;
 			clear: left;
-			font-size: 22px;
+			font-size: 28px;
 			font-weight: bold;
-			margin: 4px;
+			font-color: #FF9500;
 			padding: 5px;
-			width: 200px;
+			height: 36px;
+			width: 99%;
 		}
 		.menu input.green {
 			background-color: green;
@@ -156,47 +146,75 @@
 	</style>
   </head>
   <body>
-	<div class="maxHeight contMenu">
-		<h1>ESP SERVER</h1>
-		<form action="/filename?name=chat.txt" method="POST">
+	<div class="maxHeight titleLabel">
+		<h1>ESP MENU</h1>
+		<form action="133.133.7.7/ws" method="POST">
 		<input type="submit" value="Submit">
 		</form>
 		
 		<div class="menuContainer">
-			<form action="/Net" class="menu"><input type="submit" value="Net" class="green"></form>		
-			<form action="/Cmd" class="menu"><input type="submit" value="Cmd" class="red"></form>		
-			<form action="/File" class="menu"><input type="submit" value="File" class="yellow"></form>
+			<form action="/network" class="menu"><input type="submit" value="Network" class="green"></form>
+			<form action="/files" class="menu"><input type="submit" value="Files" class="yellow"></form>
+			<form action="/cmd" class="menu"><input type="submit" value="Cmd" class="red"></form>
 		</div>
 		
 		<a href="filename">pliczek</a>
 		
-		<script src="/scripts/chat.js"></script>
 		<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
-		
-		<label for="chatInput">Message:</label>
-		<input type="text" id="chatInput" class="chatInput">
-		<input onclick="sendChatMessage()" type="submit" value="Send" class="chatSend">
 	</div>
+	
+	<! Middle box for interactive content>
 	<div class="maxHeight centerForm">
-		<iframe class="noBorders" src="confirm.html" name="confirm" height="100%" width="600">You need a Frames Capable browser to view this content.</iframe>   
+		<iframe class="noBorders" src="netcfg.html" name="netcfg" height="100%" width="600">You need a Frames Capable browser to view this content.</iframe>   
 	</div>
-	<div class="maxHeight contChat">
-		<h2>ESP CHAT</h2>
+	
+	<div class="maxHeight titleLabel">
+		<h2>CHAT</h2>
 		
+		<script type="application/javascript">
+		var ws = null;
 		
+		function startSocket(){
+		  ws = new WebSocket('ws://'+document.location.host+'/ws',['arduino']);
+		  
+			//websocket.onopen    = onOpen;
+			//websocket.onclose   = onClose;
+			//websocket.onmessage = onMessage; // <-- add this line
+		}
+		
+		function sendText() {
+		/*
+		  var msg = {
+			type: "message",
+			text: "for now testmessage",
+			ip:   clientID,
+		  };
+
+		  ws.send(JSON.stringify(msg));*/
+		  var chatWindow = document.getElementById('chatWindow');
+		  chatWindow.value = chatWindow.value + document.getElementById('chatInput').value
+		  alert(document.getElementById('chatInput').value);
+		}
+		</script>
 		<div class="chatContainer">
-			<textarea>
-192.168.1.250: cześć
-ja: cześć byku!
+			<textarea id="chatWindow">
 			</textarea>
 		</div>
 		
 		<div class="myMessage">
-			<input type="text" name="myInput" />
-			<input type="submit" value="Send">
+			<input type="text" id="chatInput"/>
+			<input type="submit" value="Send" onclick="sendText()">
 		</div>
 		
-		
+		<script type="application/javascript">
+		window.onload = function() {
+			document.getElementById('chatWindow').value = 'something works';
+			//startSocket();
+			//sendText();
+			//ws.send("dataMyFriend");
+			//document.getElementById('chatContainer').innerHTML = 'hello';
+		}
+		</script>
 	</div>
   </body>
 </html>

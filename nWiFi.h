@@ -2,39 +2,30 @@
 #define NETWORK_H
 
 #include <ESP8266WiFi.h>
+#include <DNSServer.h>
 #include "FlashFile.h"
 
 namespace network {
-  static String nSsid = "not_conf";
+namespace wifi {
+namespace apMode {
+  const String nSsid = "not_conf";
   
-  void configureIP();
-  void disableWiFi();
-  void enableWiFi(String ssid);
-  void enableWiFi();
+  void configure(IPAddress thisDevIP = IPAddress(133,133,7,7));
+  void disable();
+  void enable(String ssid);
+} // namespace apMode
 
-  void loadConfig(const FlashFile& configFile);
-}
+namespace external {
+  void connect(String ssid, String pass);
+} // namespace external
+} // namespace wifi
 
-void network::configureIP() {
-  IPAddress localIp(133,133,7,7);
-  IPAddress gateway(133,133,7,7);
-  IPAddress subnet(255,255,255,0);
-  WiFi.softAPConfig(localIp, gateway, subnet);
-}
+namespace dns {
+  const  int       port = 53;
+  extern DNSServer server;
 
-void network::disableWiFi() {
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-  delay(100);
-  WiFi.mode(WIFI_STA);
-}
-
-void network::enableWiFi(String ssid = nSsid) {
-  WiFi.softAP(ssid);
-}
-
-void network::loadConfig(const FlashFile& configFile) {
-  nSsid = configFile.readKeyValueToContent("ssid");
-}
+  void processRequests();
+} // namespace dns
+} // namespace network
 
 #endif // NETWORK_H

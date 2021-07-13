@@ -27,43 +27,69 @@ File& FlashFile::getSPIFileByReference() {
   return mFile;
 }
 
-template <typename T>
-bool FlashFile::writeKeyValueToContent(String key, T value) {
-  StaticJsonDocument<200> json;
-  json[key] = value;
-  
+bool FlashFile::writeKeyValue(String key, String value) {
   File mFile = SPIFFS.open(mFilePath, "a+");
   if (!mFile) {
     return false;
   }
-  serializeJson(json, mFile);
+  
+  String content = "";
+  while (mFile.available())
+    content += mFile.readString();
+
+  saveIniValue(content, key, value);
+  
+  mFile.write(content.c_str());
   mFile.close();
   return true;
 }
 
-String FlashFile::readKeyValueToContent(String key) const {
-  File mFile = SPIFFS.open(mFilePath, "r");
-  
-  size_t size = mFile.size();
-  char* buf = new char[size];
-  mFile.readBytes(buf, size);
-  
-  //DynamicJsonDocument json(200);
-  //DeserializationError error = deserializeJson(json, buf);
+template <typename T>
+bool FlashFile::saveIniValue(String& content, const String& key, const T& value) {
+  if (key == "") { return false; }
 
-  String value = "some_wifi";
+  String endOfLine = "\n";
+  String keyValueLine = key + "=" + String(value) + endOfLine;
+
+  int keyIndex = content.indexOf(key);
+  if (keyIndex < 0) {
+    content += keyValueLine;
+    return true;
+  }
+
+  String frontPartStr = content.substring(0, keyIndex);
+  String backPartStr = content.substring(content.indexOf(endOfLine) + 1);
+  content = frontPartStr + keyValueLine + backPartStr;
   
-  mFile.close();
-  delete buf;
-  return value;
+  return true;
+}
+
+String FlashFile::readKeyValue(const String key) {
+  String content = loadContent();
+
+  if (content.indexOf(key) < 0)
+    return "";
+
+  String returnVal = loadIniValue(content, key);
+  return returnVal;
+}
+
+String FlashFile::loadIniValue(const String& content, const String& key) const {
+  String returnValue = content.substring(content.indexOf(key));
+  returnValue = returnValue.substring(0, returnValue.indexOf("\n"));
+  returnValue = returnValue.substring(returnValue.indexOf("=") + 1);
+  returnValue.trim();
+  return returnValue;
 }
 
 bool FlashFile::saveContent(const String content, _WriteType writeType) {
   if (writeType == _WriteType::Override)
     SPIFFS.remove(mFilePath);
+    
   File file = SPIFFS.open(mFilePath, "a+");
   if (!file)
     return false;
+    
   file.write(content.c_str());
   file.close();
   return true;
@@ -71,15 +97,16 @@ bool FlashFile::saveContent(const String content, _WriteType writeType) {
 
 String FlashFile::loadContent() {
   if (!SPIFFS.exists(mFilePath))
-    return "NoFile: " + mFilePath;
+    return "";
 
   File file = SPIFFS.open(mFilePath, "r");
   if (!file) 
-    return "CannotReadFile: " + mFilePath;
-  
+    return "";
+
+  String returnString = "";
   while (file.available())
-    Serial.write(file.read());
+    returnString += file.readString();
 
   file.close();
-  return "";
+  return returnString;
 }

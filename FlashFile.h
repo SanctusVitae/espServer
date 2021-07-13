@@ -20,9 +20,8 @@ class FlashFile {
     File&   getSPIFileByReference();
     void    changeFilePath(String filePath);
   
-    template <typename T>
-    bool    writeKeyValueToContent(String key, T value);
-    String  readKeyValueToContent(String key) const;
+    bool    writeKeyValue(String key, String value);
+    String  readKeyValue(String key);
     
     bool    saveContent(const String content, _WriteType writeType = _WriteType::Override);
     String  loadContent();
@@ -31,6 +30,10 @@ class FlashFile {
     File    mFile;
     String  mFilePath;
     bool    mExisted;
+
+    template <typename T>
+    bool    saveIniValue(String& content, const String& key, const T& value);
+    String  loadIniValue(const String& content, const String& key) const;
     
     static bool fileSystemStarted;
     static void flashSystemBegin();

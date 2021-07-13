@@ -15,16 +15,16 @@ namespace network {
 } // namespace network
 */
 namespace network {
-  static const int    httpPort = 80;
-  static const String configFileName = "/netConf.ini";
+  const int    httpPort = 80;
+  const String configFileName = "/netConf.ini";
 
   namespace website {
-    const String index  = "/web/index.html";
-    const String chat   = "/web/chat.html";
-    const String files  = "/web/files.html";
-    const String netcf  = "/web/netcf.html";
-    const String comm   = "/web/comm.html";
-    const String conf   = "/web/confirm.html";
+    const String index  = "/index.htm";
+    const String chat   = "/chat.html";
+    const String files  = "/files.html";
+    const String netcf  = "/netcf.html";
+    const String comm   = "/comm.html";
+    const String netcfg = "/netcfg.html";
   } // website
 
   namespace respCode {

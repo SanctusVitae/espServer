@@ -27,20 +27,25 @@ File& FlashFile::getSPIFileByReference() {
   return mFile;
 }
 
-bool FlashFile::writeKeyValue(String key, String value) {
-  File mFile = SPIFFS.open(mFilePath, "a+");
-  if (!mFile) {
+bool FlashFile::replaceImmediately(String& cutThis, String& pasteThis) {
+  String content = this->loadContent();
+
+  int keyIndex = content.indexOf(cutThis);
+  if (keyIndex < 0)
     return false;
-  }
-  
-  String content = "";
-  while (mFile.available())
-    content += mFile.readString();
+
+  String frontPartStr = content.substring(0, keyIndex);
+  String backPartStr = content.substring(keyIndex + cutThis.length());
+  this->saveContent(frontPartStr + pasteThis + backPartStr);
+  return true;
+}
+
+bool FlashFile::writeKeyValue(String key, String value) {
+  String content = loadContent();
 
   saveIniValue(content, key, value);
-  
-  mFile.write(content.c_str());
-  mFile.close();
+
+  saveContent(content);
   return true;
 }
 
@@ -57,10 +62,8 @@ bool FlashFile::saveIniValue(String& content, const String& key, const T& value)
     return true;
   }
 
-  String frontPartStr = content.substring(0, keyIndex);
-  String backPartStr = content.substring(content.indexOf(endOfLine) + 1);
-  content = frontPartStr + keyValueLine + backPartStr;
-  
+  String replaceStr = content.substring(keyIndex, content.indexOf(endOfLine, keyIndex + 1) + 1);
+  content.replace(replaceStr, keyValueLine);
   return true;
 }
 

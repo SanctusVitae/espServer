@@ -2,26 +2,17 @@
 #define NCONSTANTS_H
 
 #include <Arduino.h>
-/*
-namespace network {
-  class RouteToElement {
-      //String& mRoute;
-      String& mElement;
-    public:
-      RouteToElement(String& element) : mElement(element) {}
-      String& getRoute()    { return mRoute; }
-      String& getElement()  { return mElement; }
-  };
-} // namespace network
-*/
+
 namespace network {
   const int    httpPort = 80;
   const String configFileName = "/netConf.ini";
+  const String chatLogFileName = "/cont/chat.log";
 
   namespace website {
     const String index  = "/index.htm";
     const String chat   = "/chat.html";
     const String files  = "/files.html";
+    const String files_r= "/files_raw.html";
     const String netcf  = "/netcf.html";
     const String comm   = "/comm.html";
     const String netcfg = "/netcfg.html";
@@ -39,13 +30,8 @@ namespace network {
     const String js     = "application/javascript";
     const String gz     = "application/x-gzip";
   } // mimeType
-/*
-  namespace pageRoute {
-    const RouteToElement index  =
-    const RouteToElement chat   =
-  }*/
 
-  String convertToMIMEType(String fileName);
+  String convertToMIMEType(const String fileName);
 }
 
 #endif // NCONSTANTS

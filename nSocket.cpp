@@ -1,35 +1,38 @@
-/*
 #include "nSocket.h"
 
-void onClientConnect() {
-  Serial.println("Client connected!");
+String getSocketDataById(String& data, String id) {
+  const String extendedId = "\"" + id + "\":\"";
+  int idIndex = data.indexOf(extendedId);
+  if (idIndex < 0)
+    return "";
+
+  data = data.substring(idIndex + extendedId.length());
+  if (data.indexOf("\",\"") >= 0)
+    return data.substring(0, data.indexOf("\""));
+  else
+    return data.substring(0, data.indexOf("\"}"));
 }
 
-void onClientDisconnect(AsyncWebSocketClient* client) {
-  //os_printf("ws[%s][%u] disconnect: %u\n", server->url(), client->id());
+String stringifyIP(IPAddress IP) {
+  return String(IP[0]) + "." + String(IP[1]) + "." + String(IP[2]) + "." + String(IP[3]);
 }
 
-void onWsEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len) {
-  Serial.println("Something happened!");
-  if (type == WS_EVT_CONNECT) {
-    Serial.println("Client connected!");
-    return;
+void ChatWebSocket::updateChat(AsyncWebSocket* server, AsyncWebSocketClient* client, uint8_t* data) {
+  String dataStr((char*)data);
+  String clientMsg = stringifyIP(client->remoteIP()) + ": " + getSocketDataById(dataStr, "chat") + "\n";
+
+  FlashFile logChat(network::chatLogFileName);
+  logChat.saveContent(clientMsg, FlashFile::_WriteType::Append);
+  server->textAll(logChat.loadContent());
+}
+
+void ChatWebSocket::callbackEventProcessor(AsyncWebSocket* server, AsyncWebSocketClient* client, AwsEventType type, void* arg, uint8_t* data, size_t len) {
+  // AsyncWebSocketBasicMessage* msg = new AsyncWebSocketBasicMessage("testMsg", 7);
+  switch(type) {
+    case WS_EVT_CONNECT: break;
+    case WS_EVT_DISCONNECT: break;
+    case WS_EVT_DATA: updateChat(server, client, data); break;
+    case WS_EVT_PONG: Serial.println("Pong"); break;
+     default: Serial.println("unexpected event"); break;
   }
-  if (type == WS_EVT_DISCONNECT) {
-    onClientDisconnect(client);
-    return;
-  }
-  if (type == WS_EVT_ERROR) { //error was received from the other end
-    //os_printf("ws[%s][%u] error(%u): %s\n", server->url(), client->id(), *((uint16_t*)arg), (char*)data);
-    return;
-  }
-  if (type == WS_EVT_PONG) { //pong message was received (in response to a ping request maybe)
-    //os_printf("ws[%s][%u] pong[%u]: %s\n", server->url(), client->id(), len, (len)?(char*)data:"");
-    return;
-  }
-  if (type == WS_EVT_DATA) {
-    return;
-  } else {
-    Serial.println("Diff data type");
-  }
-}*/
+}

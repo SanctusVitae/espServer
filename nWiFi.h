@@ -1,3 +1,5 @@
+// Obsługa wifi, dnsa, zewnętrznego neta itp. Namespace bo nie jestem fanem singletonów, nadal trwają dyskusje czy to antypattern
+
 #ifndef NETWORK_H
 #define NETWORK_H
 
@@ -16,7 +18,7 @@ namespace apMode {
 } // namespace apMode
 
 namespace external {
-  void connect(String ssid, String pass);
+  void connect(String toSsid, String onPass);
 } // namespace external
 } // namespace wifi
 
@@ -24,7 +26,7 @@ namespace dns {
   const  int       port = 53;
   extern DNSServer server;
 
-  void processRequests();
+  void processNextRequest();
 } // namespace dns
 } // namespace network
 

@@ -1,24 +1,25 @@
-#pragma once
+#ifndef NSERVER_H
+#define NSERVER_H
 
 #include <ESPAsyncWebServer.h>
 #include "nConstants.h"
 
-class HTTPWebServer {
-    AsyncWebServer mServer;
-
-    void retrieveIndexPage();
-    void retrieveConfPage();
-    void sendFileForDownloadOnRoute(String route, String fileName);
-    void downloadFile();
-    void printMessageFromUser();
+class HTTPWebServer : public AsyncWebServer{
+    void loadBasePages();
+    void listFilesForDownload(const String& dirPath);
     void updateNetworkConfig();
+    void restoreDefaultNetcfg();
     void restartEspDevice();
 
+    //void sendFileForDownloadOnRoute(String route, String fileName);
+
     public:
-      HTTPWebServer(int port) : mServer(AsyncWebServer(port)) { }
+      HTTPWebServer(int port) : AsyncWebServer(port) { }
 
-      AsyncWebServer& getServer() { return mServer; }
-
-      void configureResponses();
-      void startServerService();
+      void handleSocket(AsyncWebSocket& socket);
+      void setStaticWebsites();
+      void serveStaticShort(const String& path);
+      void setupResponses();
 };
+
+#endif // NSERVER_H

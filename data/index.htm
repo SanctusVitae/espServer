@@ -148,19 +148,13 @@
   <body>
 	<div class="maxHeight titleLabel">
 		<h1>ESP MENU</h1>
-		<form action="133.133.7.7/ws" method="POST">
-		<input type="submit" value="Submit">
 		</form>
 		
 		<div class="menuContainer">
-			<form action="/network" class="menu"><input type="submit" value="Network" class="green"></form>
-			<form action="/files" class="menu"><input type="submit" value="Files" class="yellow"></form>
-			<form action="/cmd" class="menu"><input type="submit" value="Cmd" class="red"></form>
+			<form action="/netcfg.html" class="menu"><input type="submit" value="Network" class="green"></form>
+			<form action="/files.html" class="menu"><input type="submit" value="Files" class="yellow"></form>
+			<form action="/webMenu" class="menu"><input type="submit" value="Cmd" class="red"></form>
 		</div>
-		
-		<a href="filename">pliczek</a>
-		
-		<script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 	</div>
 	
 	<! Middle box for interactive content>
@@ -177,23 +171,24 @@
 		function startSocket(){
 		  ws = new WebSocket('ws://'+document.location.host+'/ws',['arduino']);
 		  
-			//websocket.onopen    = onOpen;
-			//websocket.onclose   = onClose;
-			//websocket.onmessage = onMessage; // <-- add this line
+		  ws.onmessage = function(event) {
+			document.getElementById('chatWindow').value = event.data;
+		  };
 		}
 		
 		function sendText() {
-		/*
-		  var msg = {
-			type: "message",
-			text: "for now testmessage",
-			ip:   clientID,
-		  };
-
-		  ws.send(JSON.stringify(msg));*/
-		  var chatWindow = document.getElementById('chatWindow');
-		  chatWindow.value = chatWindow.value + document.getElementById('chatInput').value
-		  alert(document.getElementById('chatInput').value);
+			var chatText = document.getElementById('chatInput').value;
+			var msg = {
+				chat: chatText
+			};
+			
+			chatText = "";
+			ws.send(JSON.stringify(msg));
+		}
+		
+		window.onload = function() {
+			startSocket();
+			sendText();
 		}
 		</script>
 		<div class="chatContainer">
@@ -205,16 +200,6 @@
 			<input type="text" id="chatInput"/>
 			<input type="submit" value="Send" onclick="sendText()">
 		</div>
-		
-		<script type="application/javascript">
-		window.onload = function() {
-			document.getElementById('chatWindow').value = 'something works';
-			//startSocket();
-			//sendText();
-			//ws.send("dataMyFriend");
-			//document.getElementById('chatContainer').innerHTML = 'hello';
-		}
-		</script>
 	</div>
   </body>
 </html>

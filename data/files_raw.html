@@ -57,26 +57,8 @@
 	</style>
   </head>
   <body>
-		<form action="/netcfgset" method="POST" class="formLayout">
-			<h3>Network</h3>
-			<h3>softAP config</h3>
-			<label for="apssid">softAP SSID</label>
-			<input id="apssid" name="apssid" type="text" value="" />
-			<label for="appass">softAP PASS</label>
-			<input id="appass" name="appass" type="password" value="" />
-			<label for="apip">softAP IP</label>
-			<input id="apip" name="apip" type="text" value="" />
-			<label for="netssid">net SSID</label>
-			<input id="netssid" name="netssid" type="text" value="" />
-			<label for="netpass">net PASS</label>
-			<input id="netpass" name="netpass" type="password" value="" />
-			<input type="submit" value="Send" class="submitButton">
-		</form>
-		<form action="/restoreDef" method="POST">
-			<input type="submit" value="Restore Default" class="resetButton">
-		</form>
-		<form action="/restartDev" method="POST">
-			<input type="submit" value="Reset" class="resetButton">
-		</form>
+		<form action="/netcfg" method="POST" class="formLayout">
+			<h3>Files for download:</h3>
+			REPLACE_HERE
   </body>
 </html>

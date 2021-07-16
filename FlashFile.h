@@ -1,3 +1,7 @@
+// Tutaj miały być obsługi JSONów jednak ostatecznie zdecydowałem się na coś w stylu plików .ini
+// Dlaczego otwieranie i zamykanie plików w każdej funkcji? Wyczytałem w połowie robienia programu, że złym pomysłem jest trzymanie otwartego kontekstu pliku w SPIFFS
+// Ponoć wytwarza sporo błędów i ciągnie pamięć. Jako, że operacji na plikach nie ma dużo to zostawiam jak jest
+
 #ifndef FLASHFILE_H
 #define FLASHFILE_H
 
@@ -18,7 +22,8 @@ class FlashFile {
   
     bool    existed();
     File&   getSPIFileByReference();
-    void    changeFilePath(String filePath);
+    //void    changeFilePath(String filePath);
+    bool    replaceImmediately(String& cutThis, String& pasteThis);
   
     bool    writeKeyValue(String key, String value);
     String  readKeyValue(String key);

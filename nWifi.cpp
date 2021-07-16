@@ -23,7 +23,9 @@ DNSServer network::dns::server = DNSServer();
 
 void network::wifi::external::connect(String toSsid, String onPass) {
   WiFi.begin(toSsid, onPass);
-  while (WiFi.status() != WL_CONNECTED) { delay(100); }
+  int connectionRetryTimes = 50;
+  int time = 0;
+  while ((WiFi.status() != WL_CONNECTED) && (time < connectionRetryTimes)) { delay(100); time++; }
 }
 
 void network::dns::processNextRequest() {

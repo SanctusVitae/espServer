@@ -47,9 +47,6 @@ void HTTPWebServer::updateNetworkConfig() {
     }
     configFile.writeKeyValue("netssid", request->arg("netssid"));
     configFile.writeKeyValue("netpass", request->arg("netpass"));
-    Serial.println("Value is: " + configFile.readKeyValue("apssid"));
-    Serial.println("Value is: " + configFile.readKeyValue("appass"));
-    Serial.println(configFile.loadContent());
   });
 }
 
@@ -87,7 +84,6 @@ void HTTPWebServer::restoreDefaultNetcfg() {
 void HTTPWebServer::restartEspDevice() {
   AsyncWebServer* lambdaServer = this;
   on("/restartDev", HTTP_POST, [lambdaServer](AsyncWebServerRequest* request){
-    lambdaServer->reset();
     ESP.restart();
   });
 }

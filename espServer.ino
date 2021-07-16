@@ -47,7 +47,6 @@ void configureConnection() {
   String apSSID = "";
   
   FlashFile configFile(network::configFileName);
-  configFile.saveContent("");
   if (configFile.existed()) {
     apSSID = configFile.readKeyValue("apssid");
     externalSSID = configFile.readKeyValue("netssid");
